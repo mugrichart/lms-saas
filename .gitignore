@@ -10,6 +10,9 @@
 !.yarn/releases
 !.yarn/versions
 
+# reference
+/lms-platform-ai-saas-sanity-clerk-coderabbit-mux-openai-ai-agent-nextjs-16
+
 # testing
 /coverage
 
