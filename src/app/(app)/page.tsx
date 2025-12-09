@@ -2,16 +2,21 @@ import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, BookOpen, CheckCircle2, Code2, Crown, LayoutDashboard, Play, Rocket, Sparkles, Star, Trophy, Users } from "lucide-react";
 import Link from "next/link";
-// import { CourseCard } from "@/components/courses"
+import { CourseCard } from "@/components/courses"
 
 import { currentUser } from "@clerk/nextjs/server"
+import { sanityFetch } from "@/sanity/lib/live";
+import { FEATURED_COURSES_QUERY, STATS_QUERY } from "@/sanity/lib/queries";
 
 export default async function Home() {
-  const user = await currentUser();
+  // Fetch featured courses, stats, and check auth status
+  const [{ data: courses}, { data: stats}, user] = await Promise.all([
+    sanityFetch({ query: FEATURED_COURSES_QUERY}),
+    sanityFetch({ query: STATS_QUERY}),
+    currentUser()
+  ])
   
   const isSignedIn = !!user;
-
-  // const stats = await sanityFetch.fetch(STATS_QUERY);
 
   return (
     <div className="min-h-screen bg-[#09090b] text-white overflow-hidden">
@@ -129,7 +134,7 @@ export default async function Home() {
             </div>
 
             {/* Stats */}
-            {/* <div
+            <div
               className="mt-16 grid grid-cols-3 gap-8 md:gap-16 animate-fade-in"
               style={{ animationDelay: "0.5s" }}
             >
@@ -156,7 +161,7 @@ export default async function Home() {
                   <span className="text-sm text-zinc-500">{stat.label}</span>
                 </div>
               ))}
-            </div> */}
+            </div>
           </div>
         </section>
 
@@ -260,7 +265,7 @@ export default async function Home() {
             </p>
           </div>
 
-          {/* <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-6">
             {courses.map((course) => (
               <CourseCard
                 key={course.slug!.current!}
@@ -273,7 +278,7 @@ export default async function Home() {
                 lessonCount={course.lessonCount}
               />
             ))}
-          </div> */}
+          </div>
 
           <div className="text-center mt-10">
             <Link href="/dashboard">
